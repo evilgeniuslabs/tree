@@ -16,6 +16,8 @@ extern char* itoa(int a, char* buffer, unsigned char radix);
 
 #define NUM_LEDS 50
 
+static const int numLeds = NUM_LEDS;
+
 CRGB leds[NUM_LEDS];
 
 typedef uint8_t (*SimplePattern)();
@@ -42,6 +44,7 @@ const PatternAndNameList patterns =
   { bpm,                    "Beat" },
   { juggle,                 "Juggle" },
   { fire,                   "Fire" },
+  { draw,                   "Draw" },
   { showSolidColor,         "Solid Color" }
 };
 
@@ -89,7 +92,7 @@ CRGBPalette16 targetPalette = palettes[paletteIndex];
 
 void setup()
 {
-    FastLED.addLeds<WS2812B, TX>(leds, NUM_LEDS);
+    FastLED.addLeds<WS2811, TX>(leds, NUM_LEDS);
     FastLED.setCorrection(Typical8mmPixel);
     FastLED.setBrightness(brightness);
     FastLED.setDither(false);
@@ -135,6 +138,7 @@ void setup()
     Particle.variable("r", r);
     Particle.variable("g", g);
     Particle.variable("b", b);
+    Particle.variable("numLeds", numLeds);
 
     patternNames = "[";
     for(uint8_t i = 0; i < patternCount; i++)
@@ -183,32 +187,38 @@ void loop()
 
 int setVariable(String args)
 {
-    if(args.startsWith("pwr:")) {
+    if(args.startsWith("pwr:")) { // pwr: 1
         return setPower(args.substring(4));
     }
-    else if (args.startsWith("brt:")) {
+    else if (args.startsWith("brt:")) { // brt: 255
         return setBrightness(args.substring(4));
     }
-    else if (args.startsWith("r:")) {
+    else if (args.startsWith("r:")) { // r: 255
         r = parseByte(args.substring(2));
         solidColor.r = r;
         EEPROM.write(2, r);
         patternIndex = patternCount - 1;
         return r;
     }
-    else if (args.startsWith("g:")) {
+    else if (args.startsWith("g:")) { // g: 255
         g = parseByte(args.substring(2));
         solidColor.g = g;
         EEPROM.write(3, g);
         patternIndex = patternCount - 1;
         return g;
     }
-    else if (args.startsWith("b:")) {
+    else if (args.startsWith("b:")) { // b: 255
         b = parseByte(args.substring(2));
         solidColor.b = b;
         EEPROM.write(4, b);
         patternIndex = patternCount - 1;
         return b;
+    }
+    else if (args.startsWith("c:")) { // rgb:255,255,255
+      return setColor(args.substring(2));
+    }
+    else if (args.startsWith("i:")) { // irgb:19,255,255,255
+      return setPixel(args.substring(2));
     }
 
     return -1;
@@ -239,6 +249,55 @@ int setBrightness(String args)
     EEPROM.write(0, brightness);
 
     return brightness;
+}
+
+int setColor(String args)
+{
+  char inputStr[12];
+  args.toCharArray(inputStr, 12);
+  char *p = strtok(inputStr, ",");
+  r = atoi(p);
+  p = strtok(NULL,",");
+  g = atoi(p);
+  p = strtok(NULL,",");
+  b = atoi(p);
+  p = strtok(NULL,",");
+  solidColor.r = r;
+  solidColor.g = g;
+  solidColor.b = b;
+  patternIndex = patternCount - 1;
+  EEPROM.write(2, r);
+  EEPROM.write(3, g);
+  EEPROM.write(4, b);
+
+  return 0;
+}
+
+int setPixel(String args)
+{
+  char inputStr[12];
+  args.toCharArray(inputStr, 12);
+
+  char *p = strtok(inputStr, ",");
+  int i = atoi(p);
+
+  p = strtok(NULL,",");
+  int ir = atoi(p);
+
+  p = strtok(NULL,",");
+  int ig = atoi(p);
+
+  p = strtok(NULL,",");
+  int ib = atoi(p);
+
+  p = strtok(NULL,",");
+
+  if(i < NUM_LEDS) {
+    leds[i] = CRGB(ir, ig, ib);
+    return 0;
+  }
+
+  return -1;
 }
 
 byte parseByte(String args)
@@ -363,6 +422,11 @@ uint8_t water()
 {
     heatMap(IceColors_p, false);
 
+    return 30;
+}
+
+uint8_t draw()
+{
     return 30;
 }
 

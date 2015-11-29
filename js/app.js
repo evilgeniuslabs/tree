@@ -234,15 +234,13 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
   };
 
   $scope.setColor = function ($) {
-    var rgb = $scope.hexToRgb();
+    var color = $scope.hexToRgb();
 
-    $scope.r = rgb.r;
-    $scope.g = rgb.g;
-    $scope.b = rgb.b;
+    $scope.r = color.r;
+    $scope.g = color.g;
+    $scope.b = color.b;
 
-    $scope.setR();
-    $scope.setG();
-    $scope.setB();
+    $scope.setRGB();
   };
 
   $scope.hexToRgb = function ($) {
@@ -254,56 +252,19 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     } : null;
   }
 
-  $scope.setR = function ($) {
+  $scope.setRGB = function ($) {
     // $scope.busy = true;
+    $scope.status = 'Setting color...';
     $http({
       method: 'POST',
       url: 'https://api.particle.io/v1/devices/' + $scope.device.id + '/variable',
-      data: { access_token: $scope.accessToken, args: "r:" + $scope.r },
+      data: { access_token: $scope.accessToken, args: "c:" + $scope.r + "," + $scope.g + "," + $scope.b },
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).
     success(function (data, status, headers, config) {
       $scope.busy = false;
-      $scope.r = data.return_value;
-      $scope.status = 'Red set';
-    }).
-    error(function (data, status, headers, config) {
-      $scope.busy = false;
-      $scope.status = data.error_description;
-    });
-  };
-
-  $scope.setG = function ($) {
-    // $scope.busy = true;
-    $http({
-      method: 'POST',
-      url: 'https://api.particle.io/v1/devices/' + $scope.device.id + '/variable',
-      data: { access_token: $scope.accessToken, args: "g:" + $scope.g },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).
-    success(function (data, status, headers, config) {
-      $scope.busy = false;
-      $scope.g = data.return_value;
-      $scope.status = 'Green set';
-    }).
-    error(function (data, status, headers, config) {
-      $scope.busy = false;
-      $scope.status = data.error_description;
-    });
-  };
-
-  $scope.setB = function ($) {
-    // $scope.busy = true;
-    $http({
-      method: 'POST',
-      url: 'https://api.particle.io/v1/devices/' + $scope.device.id + '/variable',
-      data: { access_token: $scope.accessToken, args: "b:" + $scope.b },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).
-    success(function (data, status, headers, config) {
-      $scope.busy = false;
-      $scope.b = data.return_value;
-      $scope.status = 'Blue set';
+      // $scope.r = data.return_value;
+      $scope.status = 'Color set';
     }).
     error(function (data, status, headers, config) {
       $scope.busy = false;
@@ -327,6 +288,8 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
 
   $scope.getPatterns = function () {
     // $scope.busy = true;
+
+    $scope.patterns = [];
 
     // get the pattern name list
     var promise = $http.get('https://api.particle.io/v1/devices/' + $scope.device.id + '/patternNames?access_token=' + $scope.accessToken);
