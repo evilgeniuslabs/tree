@@ -214,10 +214,10 @@ int setVariable(String args)
         patternIndex = patternCount - 1;
         return b;
     }
-    else if (args.startsWith("c:")) { // rgb:255,255,255
+    else if (args.startsWith("c:")) { // c:255,255,255
       return setColor(args.substring(2));
     }
-    else if (args.startsWith("i:")) { // irgb:19,255,255,255
+    else if (args.startsWith("i:")) { // i:19,255,255,255
       return setPixel(args.substring(2));
     }
 
@@ -255,17 +255,24 @@ int setColor(String args)
 {
   char inputStr[12];
   args.toCharArray(inputStr, 12);
+
   char *p = strtok(inputStr, ",");
   r = atoi(p);
+
   p = strtok(NULL,",");
   g = atoi(p);
+
   p = strtok(NULL,",");
   b = atoi(p);
+
   p = strtok(NULL,",");
+
   solidColor.r = r;
   solidColor.g = g;
   solidColor.b = b;
+
   patternIndex = patternCount - 1;
+
   EEPROM.write(2, r);
   EEPROM.write(3, g);
   EEPROM.write(4, b);
@@ -275,8 +282,8 @@ int setColor(String args)
 
 int setPixel(String args)
 {
-  char inputStr[12];
-  args.toCharArray(inputStr, 12);
+  char inputStr[16];
+  args.toCharArray(inputStr, 16);
 
   char *p = strtok(inputStr, ",");
   int i = atoi(p);
@@ -294,6 +301,7 @@ int setPixel(String args)
 
   if(i < NUM_LEDS) {
     leds[i] = CRGB(ir, ig, ib);
+    patternIndex = patternCount - 2;
     return 0;
   }
 

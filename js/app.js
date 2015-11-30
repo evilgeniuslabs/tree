@@ -14,10 +14,13 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
   $scope.brightness = "255";
   $scope.busy = false;
   $scope.power = 1;
-  $scope.color = "#0000ff"
+  $scope.color = "#0000ff";
+  $scope.drawColor = "#0000ff";
   $scope.r = 0;
   $scope.g = 0;
   $scope.b = 255;
+  $scope.numLeds = 0;
+  $scope.leds = []
   $scope.powerText = "On";
   $scope.status = "Please enter your access token:";
   $scope.disconnected = false;
@@ -103,6 +106,7 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
 
     localStorage["deviceId"] = $scope.device.id;
 
+    $scope.status = 'Loading power...';
     variableService.getVariableValue("power", $scope.device.id, $scope.accessToken)
     .then(function (response) {
       $scope.power = response.data.result;
@@ -110,6 +114,7 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     })
 
     .then(function (data) {
+      $scope.status = 'Loading brightness...';
       return variableService.getVariableValue("brightness", $scope.device.id, $scope.accessToken);
     })
     .then(function (response) {
@@ -118,27 +123,43 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     })
 
     .then(function (data) {
+      $scope.status = 'Loading red...';
       return variableService.getVariableValue("r", $scope.device.id, $scope.accessToken);
     })
     .then(function (response) {
-      $scope.r = response.data.return_value;
+      $scope.r = response.data.result;
       $scope.status = 'Loaded red';
     })
 
     .then(function (data) {
+      $scope.status = 'Loading green...';
       return variableService.getVariableValue("g", $scope.device.id, $scope.accessToken);
     })
     .then(function (response) {
-      $scope.g = response.data.return_value;
+      $scope.g = response.data.result;
       $scope.status = 'Loaded green';
     })
 
     .then(function (data) {
+      $scope.status = 'Loading blue...';
       return variableService.getVariableValue("b", $scope.device.id, $scope.accessToken);
     })
     .then(function (response) {
-      $scope.b = response.data.return_value;
+      $scope.b = response.data.result;
       $scope.status = 'Loaded blue';
+    })
+
+    .then(function (data) {
+      $scope.status = 'Loading LED count...';
+      return variableService.getVariableValue("numLeds", $scope.device.id, $scope.accessToken);
+    })
+    .then(function (response) {
+      $scope.numLeds = response.data.result;
+      $scope.status = 'Loaded LED count';
+      $scope.leds = [];
+      for(var i = 0; i < $scope.numLeds; i++) {
+        $scope.leds.push({ index: i, color: "#000000" });
+      }
     })
 
     .then(function () {
@@ -233,8 +254,33 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     });
   };
 
+  $scope.onLedClick = function(index) {
+    // $scope.busy = true;
+    $scope.status = 'Setting pixel color...';
+
+    var led = $scope.leds[index];
+    led.color = $scope.drawColor;
+    var color = $scope.hexToRgb($scope.drawColor);
+
+    $http({
+      method: 'POST',
+      url: 'https://api.particle.io/v1/devices/' + $scope.device.id + '/variable',
+      data: { access_token: $scope.accessToken, args: "i:" + index + "," + color.r + "," + color.g + "," + color.b },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    }).
+    success(function (data, status, headers, config) {
+      $scope.busy = false;
+      // $scope.r = data.return_value;
+      $scope.status = 'Pixel color set';
+    }).
+    error(function (data, status, headers, config) {
+      $scope.busy = false;
+      $scope.status = data.error_description;
+    });
+  }
+
   $scope.setColor = function ($) {
-    var color = $scope.hexToRgb();
+    var color = $scope.hexToRgb($scope.color);
 
     $scope.r = color.r;
     $scope.g = color.g;
@@ -243,8 +289,8 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     $scope.setRGB();
   };
 
-  $scope.hexToRgb = function ($) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec($scope.color);
+  $scope.hexToRgb = function (color) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
     return result ? {
       r: parseInt(result[1], 16),
       g: parseInt(result[2], 16),

@@ -151,6 +151,20 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label for="inputDrawColor" class="col-sm-2 control-label">Draw Color</label>
+        <div class="col-sm-6">
+          <input type="color" ng-model="drawColor" class="form-control" id="inputDrawColor" ng-disabled="busy || !isDeviceSelected" />
+        </div>
+      </div>
+
+      <div class="col-xs-1 drawGrid" type="color"
+        ng-repeat="led in leds track by $index"
+        ng-model="leds[$index].color"
+        ng-disabled="busy || !isDeviceSelected"
+        ng-click="onLedClick($index)"
+        ng-style="{'background-color': leds[$index].color}"><!--{{led.index}}--></div>
+
     </form>
   </div>
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
