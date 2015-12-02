@@ -1,3 +1,25 @@
+/*
+* Tree: https://github.com/evilgeniuslabs/tree
+* Copyright (c) 2015 Jason Coon, Evil Genius Labs
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy of
+* this software and associated documentation files (the "Software"), to deal in
+* the Software without restriction, including without limitation the rights to
+* use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+* the Software, and to permit persons to whom the Software is furnished to do so,
+* subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+* FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+* COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+* IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
 #include "FastLED.h"
 FASTLED_USING_NAMESPACE;
 
@@ -332,6 +354,8 @@ int setPatternIndex(String args)
     return patternIndex;
 }
 
+// Patterns from FastLED example DemoReel100: https://github.com/FastLED/FastLED/blob/master/examples/DemoReel100/DemoReel100.ino
+
 uint8_t rainbow()
 {
   // FastLED's built-in rainbow generator
@@ -445,6 +469,7 @@ uint8_t showSolidColor()
     return 30;
 }
 
+// Pride2015 by Mark Kriegsman: https://gist.github.com/kriegsman/964de772d64c502760e5
 // This function draws rainbows with an ever-changing,
 // widely-varying set of parameters.
 uint8_t pride()
@@ -500,6 +525,7 @@ uint8_t radialPaletteShift()
   return 8;
 }
 
+// based on FastLED example Fire2012WithPalette: https://github.com/FastLED/FastLED/blob/master/examples/Fire2012WithPalette/Fire2012WithPalette.ino
 void heatMap(CRGBPalette16 palette, bool up)
 {
     fill_solid(leds, NUM_LEDS, CRGB::Black);
@@ -617,7 +643,7 @@ uint8_t colorWaves()
   return 20;
 }
 
-
+// ColorWavesWithPalettes by Mark Kriegsman: https://gist.github.com/kriegsman/8281905786e8b2632aeb
 // This function draws color waves with an ever-changing,
 // widely-varying set of parameters, using a color palette.
 void colorwaves( CRGB* ledarray, uint16_t numleds, CRGBPalette16& palette)
@@ -679,6 +705,8 @@ void palettetest( CRGB* ledarray, uint16_t numleds, const CRGBPalette16& gCurren
   startindex--;
   fill_palette( ledarray, numleds, startindex, (256 / NUM_LEDS) + 1, gCurrentPalette, 255, LINEARBLEND);
 }
+
+// based on ColorTwinkles by Mark Kriegsman: https://gist.github.com/kriegsman/5408ecd397744ba0393e
 
 uint8_t cloudTwinkles()
 {
