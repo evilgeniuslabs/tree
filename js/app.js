@@ -1,4 +1,11 @@
-var app = angular.module('app', []);
+var app = angular.module('app', ['minicolors']);
+
+app.config(function (minicolorsProvider) {
+  angular.extend(minicolorsProvider.defaults, {
+    theme: 'bootstrap',
+    changeDelay: 200
+  })
+});
 
 app.config(function ($httpProvider) {
   $httpProvider.defaults.transformRequest = function (data) {

@@ -1,0 +1,22 @@
+{
+  "name": "tree",
+  "homepage": "https://github.com/evilgeniuslabs/tree",
+  "authors": [
+    "Jason Coon"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-minicolors": "~0.0.7"
+  }
+}
