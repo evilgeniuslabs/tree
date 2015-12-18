@@ -1,5 +1,5 @@
 /*
- * Tree
+ * Tree: https://github.com/evilgeniuslabs/tree
  * Copyright (C) 2015 Jason Coon, Evil Genius Labs
  *
  * This program is free software: you can redistribute it and/or modify
