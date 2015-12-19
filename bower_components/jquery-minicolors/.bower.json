@@ -28,7 +28,7 @@
     "tag": "2.1.7",
     "commit": "98c7e9943a98fb61ea6afdf0d88dd63c35dd362d"
   },
-  "_source": "git://fmbower.securepassage.com:6789/jquery-minicolors",
+  "_source": "git://github.com/claviska/jquery-minicolors.git",
   "_target": "2.1.7",
   "_originalSource": "jquery-minicolors"
 }

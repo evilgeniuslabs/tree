@@ -32,8 +32,7 @@
     "tag": "0.0.7",
     "commit": "1839a36685c495e962a66d8a3516a7b18a7599cd"
   },
-  "_source": "git://fmbower.securepassage.com:6789/angular-minicolors",
+  "_source": "git://github.com/kaihenzler/angular-minicolors.git",
   "_target": "~0.0.7",
-  "_originalSource": "angular-minicolors",
-  "_direct": true
+  "_originalSource": "angular-minicolors"
 }

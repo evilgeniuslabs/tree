@@ -153,6 +153,7 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     })
     .then(function (response) {
       $scope.b = response.data.result;
+      $scope.color = $scope.rgbToHex($scope.r, $scope.g, $scope.b);
       $scope.status = 'Loaded blue';
     })
 
@@ -170,11 +171,11 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
     })
 
     .then(function () {
-      $scope.getPatterns();
+      return $scope.getPatterns();
     })
 
     .then(function () {
-      $scope.getPatternIndex();
+      return $scope.getPatternIndex();
     })
   }
 
@@ -303,7 +304,16 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, variableService) {
       g: parseInt(result[2], 16),
       b: parseInt(result[3], 16)
     } : null;
-  }
+  };
+
+  $scope.componentToHex = function(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+  };
+
+  $scope.rgbToHex = function(r, g, b) {
+    return "#" + $scope.componentToHex(r) + $scope.componentToHex(g) + $scope.componentToHex(b);
+  };
 
   $scope.setRGB = function ($) {
     // $scope.busy = true;
