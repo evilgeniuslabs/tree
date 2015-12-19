@@ -58,6 +58,7 @@ typedef PatternAndName PatternAndNameList[];
 
 const PatternAndNameList patterns =
 {
+  { classicTwinkles,        "Classic Twinkles" },
   { twinkleFox,             "TwinkleFOX" },
   { snowTwinkles,           "Snow Twinkles" },
   { incandescentTwinkles,   "Incandescent Twinkles" },
@@ -702,6 +703,13 @@ void palettetest( CRGB* ledarray, uint16_t numleds, const CRGBPalette16& gCurren
 
 // based on ColorTwinkles by Mark Kriegsman: https://gist.github.com/kriegsman/5408ecd397744ba0393e
 
+uint8_t classicTwinkles()
+{
+  gCurrentPalette = ClassicC9_p;
+  colortwinkles();
+  return 20;
+}
+
 uint8_t cloudTwinkles()
 {
   gCurrentPalette = CloudColors_p; // Blues and whites!
@@ -711,7 +719,7 @@ uint8_t cloudTwinkles()
 
 uint8_t rainbowTwinkles()
 {
-  gCurrentPalette = RainbowColors_p; // Blues and whites!
+  gCurrentPalette = RainbowColors_p;
   colortwinkles();
   return 20;
 }

@@ -63,12 +63,12 @@
 // Overall twinkle speed.
 // 0 (VERY slow) to 8 (VERY fast).
 // 4, 5, and 6 are recommended, default is 5.
-#define TWINKLE_SPEED 5
+#define TWINKLE_SPEED 4
 
 // Overall twinkle density.
 // 0 (NONE lit) to 8 (ALL lit at once).
 // Default is 5.
-#define TWINKLE_DENSITY 5
+#define TWINKLE_DENSITY 4
 
 // Background color for 'unlit' pixels
 // Can be set to CRGB::Black if desired.
@@ -117,6 +117,20 @@ const TProgmemRGBPalette16 Snow_p PROGMEM =
    0x404040, 0x404040, 0x404040, 0x404040,
    0x404040, 0x404040, 0x404040, 0xFFFFFF };
 
+// A palette reminiscent of large 'old-school' C9-size tree lights
+// in the five classic colors: red, orange, green, blue, and white.
+#define C9_Red 0xB80400
+#define C9_Orange 0x902C02
+#define C9_Green 0x046002
+#define C9_Blue 0x070758
+#define C9_White 0x606830
+const TProgmemRGBPalette16 ClassicC9_p PROGMEM =
+{ C9_Red, C9_Red, C9_Red,
+  C9_Orange, C9_Orange, C9_Orange,
+  C9_Green, C9_Green, C9_Green, C9_Green,
+  C9_Blue, C9_Blue, C9_Blue,
+  C9_White, C9_White, C9_White
+};
 
 // Add or remove palette names from this list to control which color
 // palettes are used, and in what order.
@@ -127,7 +141,8 @@ const TProgmemRGBPalette16* ActivePaletteList[] = {
   &FairyLight_p,
   &RedWhite_p,
   &PartyColors_p,
-  &Snow_p
+  &Snow_p,
+  &ClassicC9_p
 };
 
 // Advance to the next color palette in the list (above).
@@ -197,7 +212,7 @@ CRGB computeOneTwinkle( uint32_t ms, uint8_t salt)
 
   uint8_t hue = (slowcycle8 * 16) + salt;
   return ColorFromPalette( gCurrentPalette, hue, bright, NOBLEND);
-  
+
   // CRGB c = ColorFromPalette( gCurrentPalette, hue, bright, NOBLEND);
   // coolLikeIncandescent( c, fastcycle8);
   // return c;
