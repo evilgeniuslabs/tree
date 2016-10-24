@@ -14,4 +14,4 @@ Comes with over 20 patterns built-in.
 
 Programmable over Wi-Fi or micro USB cable.
 
-Wi-Fi Remote Control App: http://evilgeniuslabs.org/tree
+Wi-Fi Remote Control App: https://evilgeniuslabs.github.io/tree
